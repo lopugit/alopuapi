@@ -1,0 +1,37 @@
+{
+  "name": "agora",
+  "version": "1.0.0",
+  "description": "a trading platform",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lopugit/agora.git"
+  },
+  "author": "lopu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lopugit/agora/issues"
+  },
+  "homepage": "https://github.com/lopugit/agora#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.1",
+    "compression": "^1.7.0",
+    "connect-redis": "^3.3.0",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.12",
+    "nodemailer": "^4.1.0",
+    "path": "^0.12.7",
+    "pug": "^2.0.0-rc.4",
+    "socket.io": "^2.0.3",
+    "url": "^0.11.0"
+  }
+}

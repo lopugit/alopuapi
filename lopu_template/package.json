@@ -1,0 +1,36 @@
+{
+  "name": "template-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "client-sessions": "^0.7.0",
+    "connect-redis": "^3.2.0",
+    "cookie-parser": "^1.4.3",
+    "csurf": "^1.9.0",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "formage": "^2.8.2",
+    "generate-schema": "^2.3.3",
+    "glob": "^7.1.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.1",
+    "mongoose-forms": "0.0.5",
+    "node-vibrant": "^3.0.0-alpha.2",
+    "nodemailer": "^3.1.8",
+    "pug": "^2.0.0-beta11",
+    "shopify-buy": "^0.7.0",
+    "simpl-schema": "^0.2.3",
+    "socket.io": "^1.7.3"
+  },
+  "author": "",
+  "license": "ISC"
+}
