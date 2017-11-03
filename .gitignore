@@ -1,0 +1,5 @@
+/node_modules
+/conf/secrets
+/vue/src/conf
+/vue/node_modules
+/node/node_modules/secrets
