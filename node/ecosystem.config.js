@@ -7,7 +7,7 @@ module.exports = {
 
     // First application
     {
-      name      : 'alopuserver',
+      name      : 'alopu-api',
       script    : 'node/app.js',
       watch	: [ 'node/app.js', 'node/models', 'node/routes', 'node/scripts'],
       env: {
