@@ -10,6 +10,7 @@ var nodemailer = require('nodemailer')
 var pug = require('pug')
 var http = require('http').Server(express)
 var beautify = require('json-beautify')
+var beautifyhtml = require('json-pretty-html').default
 var session = require('express-session')
 var bcrypt = require('bcryptjs')
 var moment = require('moment')
@@ -23,7 +24,7 @@ var faker = require('faker')
 var authandle = require('authandle')
 var admin = require("firebase-admin")
 var {OAuth2Client} = require('google-auth-library')
-
+var textdb = require(__dirname+'/db/db.json')
 /** FIREBASE CONF */
 	var serviceAccount = secrets.firebase
 	var alopugclient = new OAuth2Client(secrets.google.CLIENT_ID)
@@ -99,20 +100,20 @@ var {OAuth2Client} = require('google-auth-library')
 			res.send('woo')
 		})
 	/** POSTS GETTER
-	 * Takes the following @param's
-	 * @param count is the number of posts you want
-	 * @param realm is the realm you want the posts from
-	 * @param @var [ @var realms ] is a list of realms you want the posts from
-	 * @param sort is the value by which you want to sort
-	 * eg. alphabetical, date are currently supported
-	 * @param sortDirection is the direction/pattern you want to sort in (if undefined it will always be descending)
-	 * eg. ascending, descending are currently supported
-	 * @param includeComments is a boolean which defines whether you want to include comment data with the posts
-	 * @param commentSort is the value by which you want to sort Comments
-	 * eg. alphabetical, date are currently supported
-	 * @param commentSortDirection is the direction/pattern you want to sort comments in (if undefined it will always be descending)
-	 * eg. ascending, descending are currently supported
-	 */
+		* Takes the following @param's
+		* @param count is the number of posts you want
+		* @param realm is the realm you want the posts from
+		* @param @var [ @var realms ] is a list of realms you want the posts from
+		* @param sort is the value by which you want to sort
+		* eg. alphabetical, date are currently supported
+		* @param sortDirection is the direction/pattern you want to sort in (if undefined it will always be descending)
+		* eg. ascending, descending are currently supported
+		* @param includeComments is a boolean which defines whether you want to include comment data with the posts
+		* @param commentSort is the value by which you want to sort Comments
+		* eg. alphabetical, date are currently supported
+		* @param commentSortDirection is the direction/pattern you want to sort comments in (if undefined it will always be descending)
+		* eg. ascending, descending are currently supported
+		*/
 		express.post('/api/posts', (req, res) => {
 			if (!req.query.count) {
 				res.send("you need to provide a count for how many posts you want")
@@ -240,9 +241,44 @@ var {OAuth2Client} = require('google-auth-library')
 	/** BOT MANAGEMENT */
 		express.post('/botcheckin', (req, res)=>{
 			if(req.body.key == 'woowoo' && req.body.ip && req.body.id){
-				let db = fs.readFile('db/db.json')
-				console.log(db)
+				if(!textdb.nodes){
+					textdb.nodes = {}
+				}
+				if(!textdb.nodes[req.body.id]){
+					console.log(textdb)
+					console.log('doing')
+					textdb.nodes[req.body.id] = {
+						// id: req.body.id,
+						ips: {
+						}
+					}
+				}
+				if(!textdb.nodes[req.body.id].ips[req.body.ip]){
+					textdb.nodes[req.body.id].ips[req.body.ip] = {
+						checkinTime: Date.now()
+					}
+				} else {
+					textdb.nodes[req.body.id].ips[req.body.ip].checkinTime = Date.now()
+				}
+				// var theseips = textdb.nodes[req.body.id].ips
+				// if(theseips.length > 10){
+				// 	theseips = theseips.slice(theseips.length - 10, theseips.length)
+				// 	textdb.nodes[req.body.id].ips = theseips
+				// }
+				fs.writeFile(__dirname+'/db/db.json', beautify(textdb, null, 2, 40), (err, done)=>{
+					if(!err){
+						res.status(200)
+						res.send('success')
+					} else {
+						res.status(500)
+						res.send('failure')
+					}
+				})
 			}
+		})
+		express.get('/bots', (req, res)=>{
+			console.log(textdb.dimensions)
+			res.send(beautifyhtml(textdb, textdb.dimensions))
 		})
 	/** CATCH ALL */
 	 express.get('*', (req, res)=>{
@@ -1605,8 +1641,3 @@ var {OAuth2Client} = require('google-auth-library')
 			return o1
 		}
 	}
-
-
-	let db = fs.readFile('db/db.json')
-	console.log('db')
-	console.log(db)

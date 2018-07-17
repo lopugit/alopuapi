@@ -9,7 +9,8 @@ module.exports = {
     {
       name      : 'alopu-api',
       script    : 'node/index.js',
-      watch	: [ 'node/index.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
+			watch	: [ 'node/index.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
+			ignore_watch: [ 'node/db' ],
       env: {
         COMMON_VARIABLE: 'true'
       },
