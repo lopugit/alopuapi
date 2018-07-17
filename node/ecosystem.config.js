@@ -8,14 +8,15 @@ module.exports = {
     // First application
     {
       name      : 'alopu-api',
-      script    : 'node/app.js',
-      watch	: [ 'node/app.js', 'node/models', 'node/routes', 'node/scripts'],
+      script    : 'node/index.js',
+      watch	: [ 'node/index.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
       env: {
         COMMON_VARIABLE: 'true'
       },
       env_production : {
         NODE_ENV: 'production'
-      }
+			},
+			node_args: "--harmony"
     }
 //,
 
