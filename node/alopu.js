@@ -255,6 +255,7 @@ var textdb = require(__dirname+'/db/db.json')
 				}
 				if(!textdb.nodes[req.body.id].ips[req.body.ip]){
 					textdb.nodes[req.body.id].ips[req.body.ip] = {
+						note: req.body.note,
 						checkinTime: Date.now()
 					}
 				} else {
