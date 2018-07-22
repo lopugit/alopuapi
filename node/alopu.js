@@ -283,6 +283,7 @@ var textdb = require(__dirname+'/db/db.json')
 		})
 	/** PROXY MANAGER */
 	express.get('/proxy:num(\d{3})', (req, res)=>{
+		console.log(req.params)
 		res.send(req.params.num)
 	})
 	/** CATCH ALL */
