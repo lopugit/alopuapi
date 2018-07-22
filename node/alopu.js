@@ -240,7 +240,7 @@ var textdb = require(__dirname+'/db/db.json')
 		})
 	/** BOT MANAGEMENT */
 		express.post('/botcheckin', (req, res)=>{
-			if(req.body.key == 'woowoo' && req.body.ip && req.body.id){
+			if(req.body.key == 'woowoo' && req.body.ip && req.body.id && req.body.ip.length && req.body.ip.length < 25){
 				if(!textdb.nodes){
 					textdb.nodes = {}
 				}
