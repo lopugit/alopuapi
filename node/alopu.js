@@ -281,6 +281,10 @@ var textdb = require(__dirname+'/db/db.json')
 			console.log(textdb.dimensions)
 			res.send(beautifyhtml(textdb, textdb.dimensions))
 		})
+	/** PROXY MANAGER */
+	express.get('/proxy:num(\d{3})', (req, res)=>{
+		res.send(req.params.num)
+	})
 	/** CATCH ALL */
 	 express.get('*', (req, res)=>{
 		 res.send('woo')
