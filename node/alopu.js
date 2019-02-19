@@ -21,7 +21,7 @@ var jsmart = require('circular-json')
 var smarts = require('smarts')({node: true})
 var uuid = require('uuid/v4')
 var faker = require('faker')
-var authandle = require('authandle')
+var authing = require('authing')
 var admin = require("firebase-admin")
 var {OAuth2Client} = require('google-auth-library')
 var textdb = require(__dirname+'/db/db.json')
@@ -46,7 +46,7 @@ var textdb = require(__dirname+'/db/db.json')
 	/** SET SESSION CONFIG */
 		express.use(
 			session({
-				name: "agora.sid",
+				name: "alopuapi.sid",
 				secret: secrets.sessionSecret,
 				resave: false,
 				saveUninitialized: false,
@@ -193,10 +193,10 @@ var textdb = require(__dirname+'/db/db.json')
 	/** AUTH */
 		express.post('/auth', (req, res)=>{
 			if(req.body.provider || req.body.token || req.body.entity){
-				authandle.auto(req.body)
+				authing.auto(req.body)
 				.then((args)=>{
 					if(args.success){
-						authandle.manifestSessionedEntity(args)
+						authing.manifestSessionedEntity(args)
 						.then(args=>{
 							if(args.success){
 								res.json(args)
@@ -637,9 +637,9 @@ var textdb = require(__dirname+'/db/db.json')
 							})
 							.then((thing) => {
 								entityModel.findOne({
-										username: 'agora'
+										username: 'alopuapi'
 									})
-									.then((agora) => {
+									.then((alopuapi) => {
 										if(
 											smarts.getsmart(thing, 'owners', []).length == 0 
 											|| 
@@ -648,7 +648,7 @@ var textdb = require(__dirname+'/db/db.json')
 												smarts.getsmart(opts.thing, 'owners', []) 
 											) 
 										){
-											thing.owners = [agora._id]
+											thing.owners = [alopuapi._id]
 											thing.parents = []
 											thing.backupState = true
 											smarts.pushOpt('deleted', thing.names)

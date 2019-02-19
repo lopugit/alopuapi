@@ -7,7 +7,7 @@ module.exports = {
 
     // First application
     {
-      name      : 'alopu-api',
+      name      : 'alopuapi',
       script    : 'node/index.js',
 			watch	: [ 'node/index.js', 'node/models', 'node/routes', 'node/scripts', 'node/'],
 			ignore_watch: [ 'node/db' ],
