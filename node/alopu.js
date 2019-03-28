@@ -293,7 +293,7 @@ var textdb = require(__dirname+'/db/db.json')
 /** SOCKET.IO */
 	/** start socket.io api's */
 		let io = require('socket.io')(http)
-		io.set('origins', '*:*')
+		io.set('origins', '*')
 
 	logs.connections = []
 
