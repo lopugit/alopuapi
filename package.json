@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env level=dev pm2 start ecosystem.config.js && pm2 log alopuapi",
-    "startp": "cross-env level=prod pm2 start ecosystem.config.js && pm2 log alopuapi",
-    "prod": "cross-env level=prod pm2 start ecosystem.config.js && pm2 log alopuapi",
+    "start": "pm2 start ecosystem.config.js -- --level dev && pm2 log alopuapi",
+    "startp": "pm2 start ecosystem.config.js -- --level prod && pm2 log alopuapi",
+    "prod": "pm2 start ecosystem.config.js -- --level prod && pm2 log alopuapi",
     "dev": "npm run start",
     "build": "npm run start",
     "debug-pm2": "pm2 start node/debug.config.js",

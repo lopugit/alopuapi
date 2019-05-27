@@ -8,15 +8,9 @@ module.exports = {
     // First application
     {
       name      : 'alopuapi',
-      script    : 'node/index.js',
+			script    : 'node/index.js',
 			watch	: true,
-			autorestart: true,
-      env: {
-        level: 'dev'
-      },
-      env_production : {
-        level: 'prod'
-			}
+			autorestart: true
     }
 //,
 
