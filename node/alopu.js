@@ -1,5 +1,5 @@
-let args = require('minimist')(process.argv.slice(2))
-global.env = args
+global.env = require('minimist')(process.argv.slice(2))
+console.log('env: ', global.env)
 let Express = require('express')
 let cors = require('cors')
 let compression = require('compression')
