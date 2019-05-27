@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start ecosystem.config.js -- --level dev && pm2 log alopuapi",
-    "startp": "pm2 start ecosystem.config.js -- --level prod && pm2 log alopuapi",
-    "prod": "pm2 start ecosystem.config.js -- --level prod && pm2 log alopuapi",
+    "start": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level dev && pm2 log alopuapi",
+    "startp": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level prod && pm2 log alopuapi",
+    "prod": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level prod && pm2 log alopuapi",
     "dev": "npm run start",
     "build": "npm run start",
     "debug-pm2": "pm2 start node/debug.config.js",
     "debug": "node --nolazy --inspect-brk=1234 node/index.js",
-    "stop": "pm2 stop alopu-api",
+    "stop": "pm2 stop alopuapi",
     "commit": "git add . ; git commit -m 'did I do that?'",
     "push": "npm run commit ; git push origin dev",
     "pull": "git pull origin dev"

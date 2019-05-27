@@ -1,3 +1,5 @@
+var env = require('minimist')(process.argv.slice(2))
+
 module.exports = {
   /**
    * Application configuration section
@@ -10,7 +12,8 @@ module.exports = {
       name      : 'alopuapi',
 			script    : 'node/index.js',
 			watch	: true,
-			autorestart: true
+			autorestart: true,
+			env,
     }
 //,
 
