@@ -1,30 +1,44 @@
-var Express = require('express')
-var cors = require('cors')
-var compression = require('compression')
-var express = Express()
-var fs = require('fs')
-var path = require('path')
-var bodyParser = require('body-parser')
-var url = require('url')
-var nodemailer = require('nodemailer')
-var pug = require('pug')
-var http = require('http').Server(express)
-var beautify = require('json-beautify')
-var beautifyhtml = require('json-pretty-html').default
-var session = require('express-session')
-var bcrypt = require('bcryptjs')
-var moment = require('moment')
-var RedisStore = require('connect-redis')(session)
-var conf = require('./conf/conf.js')
-var secrets = require('secrets')
-var jsmart = require('circular-json')
-var smarts = require('smarts')({node: true})
-var uuid = require('uuid/v4')
-var faker = require('faker')
-var authing = require('authing')
-var admin = require("firebase-admin")
-var {OAuth2Client} = require('google-auth-library')
-var textdb = require(__dirname+'/db/db.json')
+let args = require('minimist')(process.argv.slice(2))
+global.env = args
+let Express = require('express')
+let cors = require('cors')
+let compression = require('compression')
+let express = Express()
+let fs = require('fs')
+let path = require('path')
+let bodyParser = require('body-parser')
+let url = require('url')
+let nodemailer = require('nodemailer')
+let pug = require('pug')
+let http = require('http').Server(express)
+let beautify = require('json-beautify')
+let beautifyhtml = require('json-pretty-html').default
+let session = require('express-session')
+let bcrypt = require('bcryptjs')
+let moment = require('moment')
+let RedisStore = require('connect-redis')(session)
+let conf = require('./conf/conf.js')
+let secrets = require('secrets')
+global.secrets = secrets
+let jsmart = require('circular-json')
+let smarts = require('smarts')({node: true})
+let uuid = require('uuid/v4')
+let faker = require('faker')
+let authing = require('authing')
+let admin = require("firebase-admin")
+let {OAuth2Client} = require('google-auth-library')
+let textdb = require(__dirname+'/db/db.json')
+let schemas = require('philosophy')({secrets})
+let unconscious = require('unconscious')
+let sentience = require('sentience')
+let monk = require('monk')(sentience['uri.js'](secrets.mdb))
+let mdb = unconscious['mongoose.ai']({
+	config: secrets.mdb,
+	schemas
+})
+
+/** CREATE LOGS OBJECT */
+	const logs = {}
 /** FIREBASE CONF */
 	var serviceAccount = secrets.firebase
 	var alopugclient = new OAuth2Client(secrets.google.CLIENT_ID)
@@ -36,13 +50,18 @@ var textdb = require(__dirname+'/db/db.json')
 	}
 	var db = admin.firestore()
 /** EXPRESS CONFIG */
-	express.use(compression())
+	/** COMPRESSION */
+		express.use(compression())
 	/** BODY PARSER CONFIG */
 		///// SET BODY PARSER CONFIG
-		express.use(bodyParser.json())
-		express.use(bodyParser.urlencoded({
-			extended: false
-		}))
+		express.use(
+				bodyParser.urlencoded({
+				extended: false
+			})
+		)
+		express.use(
+			bodyParser.json()
+		)
 	/** SET SESSION CONFIG */
 		express.use(
 			session({
@@ -58,17 +77,15 @@ var textdb = require(__dirname+'/db/db.json')
 			})
 		)
 	/** ENABLE CORS */
-		// express.options('*', cors())
 		express.use((req, res, next)=>{
 			res.setHeader('X-Frame-Options', 'ALLOWALL')
 		  res.setHeader("Access-Control-Allow-Origin", "*")
 			res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin')
 		  next()
 		})
-/** CREATE LOGS OBJECT */
-	const logs = {}
-	
-
+/** Socket.io config */
+	let io = require('socket.io').listen(http, { origins: '*:*' })
+	// io.set('origins', '*:*')
 
 /** PUG CONF */
 	//// SET VIEW ENGINE PUG/JADE
@@ -93,8 +110,7 @@ var textdb = require(__dirname+'/db/db.json')
 	})
 
 
-/** API ENDPOINTS */
-	
+/** EXPRESS API */
 	/** ALIVE CHECK */
 		express.get('/', (req, res) => {
 			res.send('woo')
@@ -165,8 +181,9 @@ var textdb = require(__dirname+'/db/db.json')
 	/** USERNAME AVAILABILITY */
 		express.post('/usernamecheck', (req, res)=>{
 			if(req.body.username){
-				var things = db.collection('things')
+				var things = db.collection(`${smarts.getsmart(global, 'env.level', 'dev')}/things/users`)
 				things = things.where('alopu.username', '==', req.body.username)
+				
 				things.get()
 				.then(query=>{
 					if(query.size){
@@ -188,7 +205,15 @@ var textdb = require(__dirname+'/db/db.json')
 						error: err	
 					})
 				})
-			}
+			} else {
+				res.json({
+					success: false,
+					error: {
+						message: "You didn't supply a username to check",
+						err: "You didn't supply a username to check",
+					}	
+				})
+		}
 		})
 	/** AUTH */
 		express.post('/auth', (req, res)=>{
@@ -225,17 +250,21 @@ var textdb = require(__dirname+'/db/db.json')
 				})
 				.catch((err)=>{
 					console.error('An error occured handling the provider ', err)
-					res.json({
-						success: false,
-						error: ['You did not supply the right parameters for this api to work properly, please try again.', err]
-					})	
+					res.send(
+						jsmart.stringify({
+							success: false,
+							error: ['You did not supply the right parameters for this api to work properly, please try again.', err]
+						})
+					)	
 				})
 			} else {
 				console.error('something went wrong running the api endpoint, contex: ', req)
-				res.json({
-					success: false,
-					error: 'You did not supply the right parameters for this api to work properly, please try again.'
-				})
+				res.send(
+					jsmart.stringify({
+						success: false,
+						error: 'You did not supply the right parameters for this api to work properly, please try again.'
+					})
+				)
 			}
 		})
 	/** BOT MANAGEMENT */
@@ -282,40 +311,122 @@ var textdb = require(__dirname+'/db/db.json')
 			res.send(beautifyhtml(textdb, textdb.dimensions))
 		})
 	/** PROXY MANAGER */
-	express.get('/proxy:num(\d{3})', (req, res)=>{
-		console.log(req.params)
-		res.send(req.params.num)
-	})
-	/** CATCH ALL */
+		express.get('/proxy:num(\d{3})', (req, res)=>{
+			console.log(req.params)
+			res.send(req.params.num)
+		})
+	/** MONGODB/MONGOOSE */
+		express.post('/mongodb/query', async (req, res)=>{
+			if(req.body.query && req.body.model){
+				let model = mdb.models.mongoose[req.body.model]
+				if(model){
+					let data = await model.find(req.body.query).exec()
+					res.send(data)
+				}
+			} else {
+				if(!req.body.query && !req.body.model){
+					res.status(500).send({error: `You didn't supply a query or model`})
+				} else if (!req.body.query) {
+					res.status(500).send({error: `You didn't supply a query`})
+				} else if (!req.body.model) {
+					res.status(500).send({error: `You didn't supply a model`})
+				}
+			}
+		})
+		express.post('/monk/get', async (req, res)=>{
+			try {
+				let no = [ '/orders' ]
+				if(req.body.query && req.body.model && no.indexOf(req.body.model) < 0){
+					let model = monk.get(req.body.model)
+					if(model){
+						let data = await model.find(req.body.query, req.body.options)
+						res.send(data)
+					}
+				} else {
+					if(no.indexOf(req.body.model) > -1){
+						throw 'invalid permissions'
+					} else {
+						throw 'err'
+					}
+				}
+			} catch (err){
+				if(!req.body.query && !req.body.model){
+					res.send({error: `You didn't supply a query or model`})
+				} else if (!req.body.query) {
+					res.send({error: `You didn't supply a query`})
+				} else if (!req.body.model) {
+					res.send({error: `You didn't supply a model`})
+				} else {
+					res.send({error: `Something went wrong`, err})
+				}
+			}
+		})
+		express.post('/monk/put', async (req, res)=>{
+			try {
+				if(req.body.thing && req.body.model){
+					let thing = req.body.thing
+					let model = monk.get(req.body.model)
+					if(model){
+						model.update(
+							{
+								uuid: smarts.gosmart(thing, 'uuid', uuid())
+							}, 
+							thing,
+							{
+								upsert: true
+							}
+						)
+						.then(updated=>{
+							res.status(200).send({success: true})
+						})
+						.catch(err=>{ 
+							console.error('something went wrong putting an object: ', err)
+							throw err
+						})
+					} else {
+						throw 'err'
+					}
+				} else {
+					throw 'err'
+				}
+			} catch (err){
+				if(!req.body.thing && !req.body.model){
+					res.status(500).send({error: `You didn't supply a thing or model`})
+				} else if (!req.body.thing) {
+					res.status(500).send({error: `You didn't supply a thing`})
+				} else if (!req.body.model) {
+					res.status(500).send({error: `You didn't supply a model`})
+				} else {
+					res.status(500).send({error: `Something went wrong`})
+				}
+			}
+		})
+/** CATCH ALL */
 	 express.get('*', (req, res)=>{
 		 res.send('woo')
 	 })
 /** SOCKET.IO */
-	/** start socket.io api's */
-		let io = require('socket.io')(http)
-		io.set('origins', '*')
-
 	logs.connections = []
 
-	// unique names testing
-		// 3000 unique first names
-		// 180,000 + unique first + last names
-		// fs.writeFile('names.txt', 'test', function(err){
-		//   if(err){
-		//     console.error(err)
-		//   }
-		// })
-		// let fsStream = fs.createWriteStream('names.txt', {flags: 'a'})
-		// let fakers = []
-		// let dupes = 0
-		// for(var i=0;i<200000;i++){
-		//   let fakerr = faker.fake("{{name.firstName}} {{name.lastName}}")
-		//   if(fakers.indexOf(fakerr) >= 0){
-		//     dupes++
-		//   } else {
-		//     fakers.push(fakerr)
-		//   }
-		// }
+	// // unique names testing
+	// 	3000 unique first names
+	// 	180,000 + unique first + last names
+	// 	fs.writeFile('names.txt', 'test', function(err){
+	// 	  if(err){
+	// 	    console.error(err)
+	// 	  }
+	// 	})
+	// 	let fsStream = fs.createWriteStream('names.txt', {flags: 'a'})
+	// 	let fakers = []
+	// 	let dupes = 0
+	// 	for(var i=0;i<200000;i++){
+	// 	  let fakerr = faker.fake("{{name.firstName}} {{name.lastName}}")
+	// 	  if(fakers.indexOf(fakerr) >= 0){
+	// 	    dupes++
+	// 	  } else {
+	// 	    fakers.push(fakerr)
+	// 	  }
+	// 	}
 	/** INITIATE SOCKET.IO LISTENING */
 		io.on('connection', function (socket) {
 			// socket.use((packet, next)=>{
