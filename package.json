@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level dev && pm2 log alopuapi",
-    "startp": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level prod && pm2 log alopuapi",
+    "startp": "npm run prod",
     "prod": "pm2 stop alopuapi ; pm2 start node/index.js --name alopuapi --watch -- --level prod && pm2 log alopuapi",
     "dev": "npm run start",
     "build": "npm run start",
