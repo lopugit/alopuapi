@@ -12,10 +12,10 @@ module.exports = {
 			watch	: true,
 			autorestart: true,
       env: {
-        COMMON_VARIABLE: 'true'
+        level: 'dev'
       },
       env_production : {
-        NODE_ENV: 'production'
+        level: 'prod'
 			}
     }
 //,
