@@ -1,5 +1,10 @@
 global.env = require('minimist')(process.argv.slice(2))
-console.log('env: ', global.env)
+console.log('Starting A Lopu API: ')
+console.log('args: ', global.env)
+setInterval(()=>{
+	console.log('args: ', global.env)
+}, 5000)
+
 let Express = require('express')
 let cors = require('cors')
 let compression = require('compression')
