@@ -60,7 +60,7 @@ let mdb = unconscious['mongoose.ai']({
 	/** BODY PARSER CONFIG */
 		///// SET BODY PARSER CONFIG
 		express.use(
-				bodyParser.urlencoded({
+			bodyParser.urlencoded({
 				extended: false
 			})
 		)
@@ -368,7 +368,8 @@ let mdb = unconscious['mongoose.ai']({
 		})
 		express.post('/monk/put', async (req, res)=>{
 			try {
-				if(req.body.thing && req.body.model){
+				let no = [ '/orders' ]
+				if(req.body.thing && req.body.model && no.indexOf(req.body.model) < 0){
 					let thing = req.body.thing
 					let model = monk.get(req.body.model)
 					if(model){
@@ -388,6 +389,8 @@ let mdb = unconscious['mongoose.ai']({
 							console.error('something went wrong putting an object: ', err)
 							throw err
 						})
+					} else if(no.indexOf(req.body.model) > -1){
+						throw 'invalid permissions'
 					} else {
 						throw 'err'
 					}
@@ -1698,15 +1701,6 @@ let mdb = unconscious['mongoose.ai']({
 						}
 						return find
 					}
-					function compileRegExps(find){
-						Object.keys(find).forEach(key=>{
-							if(find[key].regex){
-								find[key].value = escapeRegExp(find[key].value)
-								find[key] = new RegExp(find[key].value, find[key].options)
-							}
-						})
-						return find
-					}
 		})
 
 
@@ -1762,4 +1756,13 @@ let mdb = unconscious['mongoose.ai']({
 		if (sReturn) {
 			return o1
 		}
+	}
+	function compileRegExps(find){
+		Object.keys(find).forEach(key=>{
+			if(find[key].regex){
+				find[key].value = escapeRegExp(find[key].value)
+				find[key] = new RegExp(find[key].value, find[key].options)
+			}
+		})
+		return find
 	}

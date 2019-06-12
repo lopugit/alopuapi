@@ -118,8 +118,7 @@ function createExampleThings() {
                     })
                     newObj.save(err => {
                         if (err) {
-                            console.error("there was an error saving")
-                            console.error(err)
+                            console.error('there was an error saving: ', err)
                         }
                     })
                 }
