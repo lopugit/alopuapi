@@ -14,8 +14,8 @@
     "debug": "node --nolazy --inspect-brk=1234 node/index.js",
     "stop": "pm2 stop alopuapi",
     "commit": "git add . ; git commit -m 'did I do that?'",
-    "push": "npm run commit ; git push origin dev",
-    "pull": "git pull origin dev"
+    "push": "npm run commit ; git push origin HEAD",
+    "pull": "git pull origin HEAD"
   },
   "repository": {
     "type": "git",
