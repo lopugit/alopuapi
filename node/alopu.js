@@ -173,7 +173,7 @@ let mdb = unconscious['mongoose.ai']({
 			
 						if (error) {
 							console.error("Error when trying to send email", error)
-								res.sendStatus(500).send(error)
+								res.status(500).send(error)
 						} else {
 								res.sendStatus(200)
 						}
