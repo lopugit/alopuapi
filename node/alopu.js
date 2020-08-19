@@ -2,7 +2,7 @@ global.env = require('minimist')(process.argv.slice(2))
 console.log('Starting A Lopu API: ')
 console.log('args: ', global.env)
 setInterval(()=>{
-	console.log('args: ', global.env)
+	console.log('Still Alive! Arguments were: ', global.env)
 }, 5000)
 
 let Express = require('express')
@@ -118,7 +118,7 @@ let mdb = unconscious['mongoose.ai']({
 /** EXPRESS API */
 	/** ALIVE CHECK */
 		express.get('/', (req, res) => {
-			res.send('woo')
+			res.send('Alopu API is alive!)
 		})
 	/** POSTS GETTER
 		* Takes the following @param's
