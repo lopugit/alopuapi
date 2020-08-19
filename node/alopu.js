@@ -118,7 +118,7 @@ let mdb = unconscious['mongoose.ai']({
 /** EXPRESS API */
 	/** ALIVE CHECK */
 		express.get('/', (req, res) => {
-			res.send('Alopu API is alive!)
+			res.send('Alopu API is alive!')
 		})
 	/** POSTS GETTER
 		* Takes the following @param's
