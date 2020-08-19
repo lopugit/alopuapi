@@ -147,7 +147,7 @@ let mdb = unconscious['mongoose.ai']({
 	 * @param @var req.body.email is the email the json data is sent to
 	 */
 		express.post('/api/email/json', (req, res)=>{
-			console.log(req)
+			console.log('req.body', req.body)
 			var mailOpts, smtpTrans
 			if(req.body.json && req.body.email){
 				//Setup Nodemailer transport, I chose gmail. Create an routerlication-specific password to avoid problems.
@@ -172,6 +172,7 @@ let mdb = unconscious['mongoose.ai']({
 				smtpTrans.sendMail(mailOpts, (error, response)=>{
 			
 						if (error) {
+							console.error("Error when trying to send email", error)
 								res.sendStatus(500).send(error)
 						} else {
 								res.sendStatus(200)
