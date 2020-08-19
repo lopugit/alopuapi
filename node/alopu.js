@@ -172,7 +172,7 @@ let mdb = unconscious['mongoose.ai']({
 				smtpTrans.sendMail(mailOpts, (error, response)=>{
 			
 						if (error) {
-								res.sendStatus(500)
+								res.sendStatus(500).send(error)
 						} else {
 								res.sendStatus(200)
 						}
