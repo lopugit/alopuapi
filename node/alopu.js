@@ -167,18 +167,41 @@ let mdb = unconscious['mongoose.ai']({
 						subject: 'JSON email API',
 						text: beautify(req.body.json, null, 2, 80)
 				}
-			
-			
-				smtpTrans.sendMail(mailOpts, (error, response)=>{
-			
-						if (error) {
-							console.error("Error when trying to send email", error)
-								res.status(500).send(error)
-						} else {
-								res.sendStatus(200)
-						}
-			
+				let whitelist = [
+					"@lopudesigns.com",
+					"@alopu.com",
+					"@lopu.com.au",
+					"@growlights.com.au",
+					"@growtime.com.au",
+					"@planetexpress.global"
+				]
+				let allowed = false
+				whitelist.forEach(domain=>{
+					if(!allowed){
+						allowed = mailOpts.to.length - mailOpts.to.indexOf(domain) == domain.length
+					}
 				})
+				
+			
+				if(!allowed){
+					let error = {
+						erorr: "Email is not in the email whitelist"
+					}
+					console.error("Error when trying to send email", error)
+					res.status(500).send(error)
+
+				} else {
+					smtpTrans.sendMail(mailOpts, (error, response)=>{
+				
+							if (error) {
+								console.error("Error when trying to send email", error)
+									res.status(500).send(error)
+							} else {
+									res.sendStatus(200)
+							}
+				
+					})
+				}
 
 			}
 		})
