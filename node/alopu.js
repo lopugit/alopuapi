@@ -84,9 +84,9 @@ let mdb = unconscious['mongoose.ai']({
 	/** ENABLE CORS */
 		express.use((req, res, next)=>{
 			res.setHeader('X-Frame-Options', 'ALLOWALL')
-		  res.setHeader("Access-Control-Allow-Origin", "*")
+			res.setHeader("Access-Control-Allow-Origin", "*")
 			res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin')
-		  next()
+			next()
 		})
 /** Socket.io config */
 	let io = require('socket.io').listen(http, { origins: '*:*' })
