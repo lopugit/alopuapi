@@ -9,9 +9,10 @@
     "prod": "pm2 start ecosystem.config.js --only alopuapi",
     "ai": "node thing/index.js",
     "dev": "pm2 start ecosystem.config.js --only dev-alopuapi",
+    "devandlog": "npm run dev ; pm2 log dev-alopuapi",
     "debug-pm2": "pm2 start node/debug.config.js",
     "debug": "node --nolazy --inspect-brk=1234 node/index.js",
-    "stop": "pm2 stop alopuapi ; pm2 stop dev-alopuapi",
+    "stop": "pm2 delete alopuapi ; pm2 delete dev-alopuapi",
     "commit": "git add . ; git commit -m 'did I do that?'",
     "push": "npm run commit ; git push origin HEAD",
     "pull": "git pull origin HEAD"
