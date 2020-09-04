@@ -48,7 +48,7 @@
     "json-pretty-html": "^1.1.6",
     "minimist": "^1.2.0",
     "moment": "^2.24.0",
-    "mongodb": "^2.2.36",
+    "mongodb": "^3.6.1",
     "mongoose": "^4.13.18",
     "monk": "^6.0.6",
     "node-gyp": "^6.1.0",
