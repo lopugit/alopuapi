@@ -95,7 +95,14 @@ let mdb = unconscious['mongoose.ai']({
 			next()
 		})
 /** Socket.io config */
-	let io = require('socket.io').listen(http, { origins: '*:*' })
+	let io = require('socket.io').listen(http, { 
+		origins: '*:*',
+		cors: {
+			origin: "*:*",
+			methods: ["GET", "POST"],
+			allowedHeaders: ["Access-Control-Allow-Origin"],
+		}
+	})
 	// io.set('origins', '*:*')
 
 /** PUG CONF */
