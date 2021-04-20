@@ -13,7 +13,7 @@ module.exports = {
 			name: 'alopuapi',
 			script: 'node/index.js',
 			args: '--level prod',
-			instances: 4,
+			instances: 2,
 			autorestart: true,
 			watch: false,
 			max_memory_restart: '600M',
