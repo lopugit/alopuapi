@@ -1,6 +1,12 @@
 global.env = require('minimist')(process.argv.slice(2))
 console.log('Starting A Lopu API: ')
 console.log('args: ', global.env)
+
+// catches all uncaught errors so process never dies
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ', err);
+});
+
 setInterval(()=>{
 	console.log('Still Alive! Arguments were: ', global.env)
 }, 5000)
