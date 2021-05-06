@@ -62,6 +62,8 @@ let mdb = unconscious['mongoose.ai']({
 	var db = admin.firestore()
 /** EXPRESS CONFIG */
 	/** COMPRESSION */
+//express.use('*', cors())
+//express.options('*', function (req,res) { res.sendStatus(200); });
 		express.use(compression())
 	/** BODY PARSER CONFIG */
 		///// SET BODY PARSER CONFIG
@@ -92,17 +94,29 @@ let mdb = unconscious['mongoose.ai']({
 			res.setHeader('X-Frame-Options', 'ALLOWALL')
 			res.setHeader("Access-Control-Allow-Origin", "*")
 			res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin')
+//    				res.status(200);
 			next()
 		})
 /** Socket.io config */
-	let io = require('socket.io').listen(http, { 
-		origins: '*:*',
+	let io = require('socket.io')(http, { 
+		origins: ["*:*"],
 		cors: {
 			origin: "*:*",
-			methods: ["GET", "POST"],
 			allowedHeaders: ["Access-Control-Allow-Origin"],
-		}
+		},
+handlePreflightRequest: (req, res) => {
+    res.writeHead(200, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Credentials": true
+    });
+    res.end();
+  }
 	})
+io.set('transports', [
+  	'websocket',
+	'polling'
+])	
 	// io.set('origins', '*:*')
 
 /** PUG CONF */
@@ -447,9 +461,9 @@ let mdb = unconscious['mongoose.ai']({
 			}
 		})
 /** CATCH ALL */
-	 express.get('*', (req, res)=>{
-		 res.send('woo')
-	 })
+	 //express.get('*', (req, res)=>{
+	//	 res.send('woo')
+	 //})
 /** SOCKET.IO */
 	logs.connections = []
 
@@ -484,6 +498,9 @@ let mdb = unconscious['mongoose.ai']({
 			// })
 			logs.connections.push(socket);
 			console.error("new socket created, sockets: %s", logs.connections.length);
+			socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 			socket.on('disconnect', function (data) {
 				logs.connections.splice(logs.connections.indexOf(socket), 1)
 				console.error("lost connection, connections: " + logs.connections.length);
