@@ -60,7 +60,7 @@
     "pug": "2.0.3",
     "sentience": "0.0.9",
     "smarts": "1.0.76",
-    "socket.io": "2.2.0",
+    "socket.io": "2.4.0",
     "unconscious": "1.0.16",
     "url": "0.11.0",
     "uuid": "3.3.2"
