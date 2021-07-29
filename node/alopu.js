@@ -42,8 +42,35 @@ let textdb = require(__dirname+'/db/db.json')
 let schemas = require('philosophy')({secrets})
 let unconscious = require('unconscious')
 let sentience = require('sentience')
-let monk = require('monk')(sentience['uri.js'](secrets.mdb))
-let mdb = unconscious['mongoose.ai']({
+let functions = require('functions')
+let uri = functions['uri.js'](secrets.monk)
+console.log("Connecting via monk to "+uri)
+let monk = require('monk')(uri)
+let mdb = {
+	mongoose,
+	connection: mongoose.createConnection(
+		functions['uri.js'](secrets.monk)
+	),
+	uri: functions['uri.js'](secrets.monk),
+	metaSchemaToMongoose: functions['metaSchemaToMongoose.js'],
+	schemas: {
+		thingosphere: schemas,
+		mongoose: []
+	},
+	models: {
+		mongoose: []
+	}
+}
+
+if(mdb.schemas.thingosphere){
+	let keys = Object.keys(mdb.schemas.thingosphere)
+
+	keys.forEach(key=>{
+		mdb.metaSchemaToMongoose({schema: mdb.schemas.thingosphere[key], mdb})
+	})
+}
+
+unconscious['mongoose.ai']({
 	config: secrets.mdb,
 	schemas
 })
@@ -95,14 +122,25 @@ let mdb = unconscious['mongoose.ai']({
 			next()
 		})
 /** Socket.io config */
-	let io = require('socket.io').listen(http, { 
-		origins: '*:*',
-		cors: {
-			origin: "*:*",
-			methods: ["GET", "POST"],
-			allowedHeaders: ["Access-Control-Allow-Origin"],
-		}
-	})
+let io = require('socket.io')(http, { 
+	origins: ["*:*"],
+	cors: {
+					origin: "*:*",
+					allowedHeaders: ["Access-Control-Allow-Origin"],
+	},
+	handlePreflightRequest: (req, res) => {
+		res.writeHead(200, {
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "GET,POST",
+		"Access-Control-Allow-Credentials": true
+		})
+		res.end()
+	}
+})
+io.set('transports', [
+	'websocket',
+	'polling'
+])      
 	// io.set('origins', '*:*')
 
 /** PUG CONF */
@@ -376,6 +414,7 @@ let mdb = unconscious['mongoose.ai']({
 			}
 		})
 		express.post('/monk/get', async (req, res)=>{
+			console.log('got req', req)
 			try {
 				let no = [ '/orders' ]
 				if(req.body.query && req.body.model && no.indexOf(req.body.model) < 0){
@@ -447,9 +486,9 @@ let mdb = unconscious['mongoose.ai']({
 			}
 		})
 /** CATCH ALL */
-	 express.get('*', (req, res)=>{
-		 res.send('woo')
-	 })
+	//  express.get('*', (req, res)=>{
+	// 	 res.send('woo')
+	//  })
 /** SOCKET.IO */
 	logs.connections = []
 
