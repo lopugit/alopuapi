@@ -89,6 +89,8 @@ unconscious['mongoose.ai']({
 	var db = admin.firestore()
 /** EXPRESS CONFIG */
 	/** COMPRESSION */
+//express.use('*', cors())
+//express.options('*', function (req,res) { res.sendStatus(200); });
 		express.use(compression())
 	/** BODY PARSER CONFIG */
 		///// SET BODY PARSER CONFIG
@@ -119,28 +121,29 @@ unconscious['mongoose.ai']({
 			res.setHeader('X-Frame-Options', 'ALLOWALL')
 			res.setHeader("Access-Control-Allow-Origin", "*")
 			res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin')
+//    				res.status(200);
 			next()
 		})
 /** Socket.io config */
-let io = require('socket.io')(http, { 
-	origins: ["*:*"],
-	cors: {
-					origin: "*:*",
-					allowedHeaders: ["Access-Control-Allow-Origin"],
-	},
-	handlePreflightRequest: (req, res) => {
-		res.writeHead(200, {
-		"Access-Control-Allow-Origin": "*",
-		"Access-Control-Allow-Methods": "GET,POST",
-		"Access-Control-Allow-Credentials": true
-		})
-		res.end()
-	}
-})
+	let io = require('socket.io')(http, { 
+		origins: ["*:*"],
+		cors: {
+			origin: "*:*",
+			allowedHeaders: ["Access-Control-Allow-Origin"],
+		},
+handlePreflightRequest: (req, res) => {
+    res.writeHead(200, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST",
+      "Access-Control-Allow-Credentials": true
+    });
+    res.end();
+  }
+	})
 io.set('transports', [
-	'websocket',
+  	'websocket',
 	'polling'
-])      
+])	
 	// io.set('origins', '*:*')
 
 /** PUG CONF */
@@ -486,9 +489,9 @@ io.set('transports', [
 			}
 		})
 /** CATCH ALL */
-	//  express.get('*', (req, res)=>{
-	// 	 res.send('woo')
-	//  })
+	 //express.get('*', (req, res)=>{
+	//	 res.send('woo')
+	 //})
 /** SOCKET.IO */
 	logs.connections = []
 
@@ -523,6 +526,9 @@ io.set('transports', [
 			// })
 			logs.connections.push(socket);
 			console.error("new socket created, sockets: %s", logs.connections.length);
+			socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 			socket.on('disconnect', function (data) {
 				logs.connections.splice(logs.connections.indexOf(socket), 1)
 				console.error("lost connection, connections: " + logs.connections.length);
