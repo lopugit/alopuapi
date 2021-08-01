@@ -235,7 +235,7 @@ express.post("/api/email/json", (req, res) => {
 
 /** USERNAME AVAILABILITY */
 express.post("/usernamecheck", (req, res) => {
-  if (req.body.username) {
+  if (req.body.username !== undefined) {
     var things = db.collection(
       `${smarts.getsmart(global, "env.level", "dev")}/things/users`
     );
