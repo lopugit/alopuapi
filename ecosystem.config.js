@@ -10,7 +10,7 @@ module.exports = {
 			max_memory_restart: '600M',
 		},
 		{
-			name: 'alopuapi',
+			name: 'prod-alopuapi',
 			script: 'node/index.js',
 			args: '--level prod',
 			instances: 2,
