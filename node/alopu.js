@@ -276,6 +276,74 @@ express.post("/usernamecheck", (req, res) => {
     });
   }
 });
+// For thirst
+express.get('/thirst/products.json', (req, res)=>{
+  res.json([
+    {
+      "id": "3802",
+      "name": "S/DRIVER SET TORQUEMASTER 13P",
+      "brand": "Kincrome",
+      "partNo": "K5526",
+      "barcode": "9312753085281",
+      "size": null,
+      "onPromotion": "false",
+      "images": [
+        "https://s3-ap-southeast-2.amazonaws.com/fusionfactory.commerceconnect.e1heyg8e.production/pim_media/000/002/015/K5526.jpg?1635742936"
+      ],
+      "description": "\u003cp style=\"line-height: 19.5px; color: rgb(64, 73, 76); font-family: \u0026quot;Helvetica Neue\u0026quot;, Helvetica, Arial, sans-serif; font-size: 13px;\"\u003eThis is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes.\u0026nbsp;\u003c/p\u003e",
+      "contents": [],
+      "specifications": [
+        {
+          "name": "Material",
+          "value": "S3 SVCM Alloy Steel"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "3803",
+      "name": "S/DRIVER SET TORQUEMASTER 13P",
+      "brand": "Kincrome",
+      "partNo": "K5526",
+      "barcode": "9312753085281",
+      "size": null,
+      "onPromotion": "false",
+      "images": [
+        "https://s3-ap-southeast-2.amazonaws.com/fusionfactory.commerceconnect.e1heyg8e.production/pim_media/000/002/015/K5526.jpg?1635742936"
+      ],
+      "description": "\u003cp style=\"line-height: 19.5px; color: rgb(64, 73, 76); font-family: \u0026quot;Helvetica Neue\u0026quot;, Helvetica, Arial, sans-serif; font-size: 13px;\"\u003eThis is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes.\u0026nbsp;\u003c/p\u003e",
+      "contents": [],
+      "specifications": [
+        {
+          "name": "Material",
+          "value": "S3 SVCM Alloy Steel"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "3804",
+      "name": "S/DRIVER SET TORQUEMASTER 13P",
+      "brand": "Kincrome",
+      "partNo": "K5526",
+      "barcode": "9312753085281",
+      "size": null,
+      "onPromotion": "false",
+      "images": [
+        "https://s3-ap-southeast-2.amazonaws.com/fusionfactory.commerceconnect.e1heyg8e.production/pim_media/000/002/015/K5526.jpg?1635742936"
+      ],
+      "description": "\u003cp style=\"line-height: 19.5px; color: rgb(64, 73, 76); font-family: \u0026quot;Helvetica Neue\u0026quot;, Helvetica, Arial, sans-serif; font-size: 13px;\"\u003eThis is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes. This is a description for testing purposes.\u0026nbsp;\u003c/p\u003e",
+      "contents": [],
+      "specifications": [
+        {
+          "name": "Material",
+          "value": "S3 SVCM Alloy Steel"
+        }
+      ],
+      "documents": []
+    },
+  ])
+})
 /** AUTH */
 express.post("/auth", (req, res) => {
   if (req.body.provider || req.body.token || req.body.entity) {
