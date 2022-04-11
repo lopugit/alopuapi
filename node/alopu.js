@@ -1,6 +1,4 @@
-global.env = require("minimist")(process.argv.slice(2));
-console.log("Starting A Lopu API: ");
-console.log("args: ", global.env);
+console.log("Starting A Lopu API");
 
 // catches all uncaught errors so process never dies
 process.on("uncaughtException", function (err) {
@@ -8,7 +6,7 @@ process.on("uncaughtException", function (err) {
 });
 
 setInterval(() => {
-  console.log("Still Alive! Arguments were: ", global.env);
+  console.log("Still Alive! Listening on port", process.env.PORT);
 }, 5000);
 
 let Express = require("express");
@@ -143,8 +141,8 @@ navModel = require("./models/nodes/nav.js");
 entityModel = require("./models/nodes/entity.js");
 
 /** HTTP SERVER INIT */
-http.listen(conf.port, () => {
-  console.error("%s running on port %s", conf.siteTitle, conf.port);
+http.listen(process.env.PORT, () => {
+  console.error("%s running on port %s", conf.siteTitle, process.env.PORT);
 });
 
 /** EXPRESS API */

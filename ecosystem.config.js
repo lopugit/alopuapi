@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
 		{
-			name: 'dev-alopuapi',
+			name: 'alopu-api',
 			script: 'node/index.js',
 			args: '--level dev',
 			autorestart: true,
