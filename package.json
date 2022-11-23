@@ -68,7 +68,7 @@
     "pug": "3.0.1",
     "sentience": "0.0.9",
     "smarts": "^1.0.234",
-    "socket.io": "^2.4.1",
+    "socket.io": "^2.5.0",
     "unconscious": "1.0.16",
     "url": "0.11.0",
     "uuid": "3.3.2"
